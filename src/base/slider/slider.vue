@@ -69,7 +69,7 @@
     methods: {
       _setSliderWidth(isResize) {
         this.children = this.$refs.sliderGroup.children
-        console.info(this.children.length)
+        // console.info(this.children.length)
         let sliderWidth = this.$refs.slider.clientWidth
         let width = 0
         for (let i = 0; i < this.children.length; i++) {
