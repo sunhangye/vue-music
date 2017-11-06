@@ -30,8 +30,6 @@
         <loading></loading>
       </div>
     </scroll>
-
-
   </div>
 </template>
 

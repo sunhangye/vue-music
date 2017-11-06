@@ -9,7 +9,7 @@ import fastclick from 'fastclick'
 import 'common/stylus/index.styl'
 
 Vue.config.productionTip = false
-
+Vue.config.devtools = true
 Vue.use(VueLazyload, {
   loading: require('common/image/default.png')
 })

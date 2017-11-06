@@ -15,10 +15,12 @@ export function addClass(el, className) {
 
 export function getData(el, name, val) {
   const prefix = 'data-'
-  if (val) {
-    return el.setAttribute(prefix + name, val)
+  if (val) { // 是否有第三个参数 有就设置，没有则获取
+    el.setAttribute(prefix + name, val)
+  } else {
+    return el.getAttribute(prefix + name)
   }
-  return el.getAttribute(prefix + name)
+
 }
 
 let elementStyle = document.createElement('div').style
