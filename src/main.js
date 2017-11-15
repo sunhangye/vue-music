@@ -1,8 +1,7 @@
-
 import Vue from 'vue'
+import store from './store/index'
 import App from './App'
 import router from './router'
-import VueRouter from 'vue-router'
 import VueLazyload from 'vue-lazyload'
 import fastclick from 'fastclick'
 
@@ -13,12 +12,13 @@ Vue.config.devtools = true
 Vue.use(VueLazyload, {
   loading: require('common/image/default.png')
 })
-fastclick.attach(document.body)
 
+fastclick.attach(document.body)
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
+  store,
   render: h => h(App)
 })

@@ -4,7 +4,7 @@
 		<li class="list-group" v-for="group in data" ref="listGroup">
 			<h2 class="list-group-title">{{group.title}}</h2>
 			<ul>
-				<li class="list-group-item" v-for="item in group.items">
+				<li class="list-group-item" v-for="item in group.items" @click="selectItem(item)">
 					<img class="avatar" v-lazy="item.avatar" alt="">
 					<span class="name">{{item.name}}</span>
 				</li>
@@ -29,10 +29,8 @@
 
 <script type="text/ecmascript-6">
 import Scroll from 'base/scroll/scroll'
-import Loading from 'base/loading/loading';
-import {
-	getData
-} from 'common/js/dom';
+import Loading from 'base/loading/loading'
+import { getData } from 'common/js/dom'
 
 const ANCHOR_HEIGHT = 18 // 锚点高度为18px
 const TITLE_HEIGHT = 30 // 固定标题高度为30
@@ -53,11 +51,15 @@ export default {
 	created() {
 		// 不必观测touch对象的变化，所以不放到data和props(添加getter setter 属性)
 		this.touch = {},
-			this.listenScroll = true,
-			this.listHeight = [],
-			this.probeType = 3
+		this.listenScroll = true,
+		this.listHeight = [],
+		this.probeType = 3
 	},
 	methods: {
+		selectItem(item) {
+			// 触发当前实例上的事件，附加参数都会传到监听器回调
+			this.$emit('select', item)
+		},
 		onShortcutTouchStart(e) {
 			// 获得touch目标的索引
 			let anchorIndex = getData(e.target, 'index')

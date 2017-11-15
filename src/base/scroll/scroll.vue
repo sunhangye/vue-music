@@ -32,7 +32,7 @@ export default {
 	mounted() {
 		setTimeout(() => {
 			this._initScroll()
-		}, this.refreshDelay);
+		}, this.refreshDelay)
 	},
 	methods: {
 		_initScroll() {

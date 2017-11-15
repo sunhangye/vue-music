@@ -27,7 +27,19 @@ module.exports = {
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    // 接口反向代理
+    proxyTable: {
+      // "/bp-api": {
+        // target: "http://new.d.st.cn",
+        //changeOrigin: true,
+        // pathRewrite: {
+        //   "^/bp-api": "/"
+        // }
+      // }
+    },
+    // target : 就是 api 的代理的实际路径
+    // changeOrigin: 就是是变源,必须是...
+    // pathRewrite : 就是路径重定向,一看就知道
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
     // (https://github.com/webpack/css-loader#sourcemaps)

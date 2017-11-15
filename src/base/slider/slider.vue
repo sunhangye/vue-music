@@ -35,12 +35,11 @@
         currentPageIndex: 0
       }
     },
-    created(){
+    created() {
       setTimeout(() => {
         this._setSliderWidth()
         this._initDots()
         this._initSlider()
-
 
         if (this.autoPlay) {
           this._play()
@@ -83,7 +82,7 @@
         }
         this.$refs.sliderGroup.style.width = width + 'px'
       },
-      _initSlider(){
+      _initSlider() {
         this.slider = new BScroll(this.$refs.slider, {
           scrollX: true,
           scrollY: false,
@@ -99,8 +98,8 @@
           // 循环 BS会自动拷贝两份item 所以要减一
           if (this.loop) {
             pageIndex -= 1
-
           }
+
           this.currentPageIndex = pageIndex
 
           if (this.autoPlay) {
@@ -115,10 +114,10 @@
           }
         })
       },
-      _initDots(){
+      _initDots() {
         this.dots = new Array(this.children.length)
       },
-      _play(){
+      _play() {
         let pageIndex = this.currentPageIndex + 1
         if (this.loop) {
           pageIndex += 1

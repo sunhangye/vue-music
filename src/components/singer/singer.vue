@@ -1,15 +1,16 @@
 <template>
   <div class="singer" rel="singer">
-  	<listview rel="list" :data="singers"></listview>
-
+  	<listview rel="list" :data="singers" @select="selectSinger"></listview>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
   import { getSingerList } from 'api/singer'
   import {ERROR_OK} from 'api/config'
-  import Singer from 'common/js/singer';
-  import Listview from 'base/listview/listview';
+  import Singer from 'common/js/singer'
+  import Listview from 'base/listview/listview'
+  import { mapMutations } from 'vuex'
 
   const HOT_SINGER_LEN = 10
   const HOT_NAME = '热门'
@@ -25,14 +26,21 @@
       }, 200)
     },
     methods: {
+      selectSinger(singer) {
+        this.$router.push({
+          path: `/singer/${singer.id}`
+        })
+        // 参数为 载荷 payload
+        this.setSinger(singer)
+      },
       getSingerList() {
         getSingerList().then((res) => {
-          if(res.code === ERROR_OK){
+          if (res.code === ERROR_OK) {
             this.singers = this._normalizeSinger(res.data.list)
           }
         })
       },
-      _normalizeSinger(list){
+      _normalizeSinger(list) {
         let map = {
           hot: {
             title: HOT_NAME,
@@ -55,6 +63,7 @@
               items: []
             }
           }
+
           map[key].items.push(new Singer({
             name: item.Fsinger_name,
             id: item.Fsinger_mid
@@ -68,17 +77,19 @@
 
           if (val.title === HOT_NAME) {
             hot.push(val)
-          }else if (val.title.match(/[a-zA-Z]/)) {
+          } else if (val.title.match(/[a-zA-Z]/)) {
             ret.push(val)
           }
         }
         ret.sort((a, b) => {
           return a.title.charCodeAt(a) - b.title.charCodeAt(b)
         })
-        console.log(hot.concat(ret))
         return hot.concat(ret)
-
-      }
+      },
+      ...mapMutations({
+        // 将 `this.setSinger()` 映射为 `this.$store.commit('SET_SINGER')`
+        setSinger: 'SET_SINGER'
+      })
     },
     components: {
       Listview
