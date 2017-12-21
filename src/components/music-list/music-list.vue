@@ -6,7 +6,7 @@
     <h1 class="title" v-html="title"></h1>
     <div class="bg-image" :style="bgStyle" ref="bgImage">
       <div class="play-wrapper">
-        <div ref="playBtn" class="play">
+        <div ref="playBtn" class="play" @click="random">
           <i class="icon-play"></i>
           <span class="text">随机播放全部</span>
         </div>
@@ -20,7 +20,7 @@
             :listen-scroll="listenScroll"
             class="list" ref="list">
       <div class="song-list-wrapper">
-        <song-list :songs="songs"></song-list>
+        <song-list :songs="songs" @select="selectItem"></song-list>
       </div>
       <div class="loading-container" v-show="!songs.length">
     		<loading></loading>
@@ -34,11 +34,14 @@ import Scroll from 'base/scroll/scroll'
 import Loading from 'base/loading/loading'
 import SongList from 'base/song-list/song-list'
 import { prefixStyle } from 'common/js/dom'
+import { mapActions } from 'vuex'
+import { playlistMixin } from 'common/js/mixin'
 
-const RESERVED_HEIGHT = 40
+const RESERVED_HEIGHT = 40 // 保留标题高度
 const transform = prefixStyle('transform')
 const backdropFilter = prefixStyle('backdrop-filter')
 export default {
+  mixins: [playlistMixin],
 	props: {
 		bgImage: {
 			type: String,
@@ -63,17 +66,38 @@ export default {
       this.listenScroll = true
     },
   mounted() {
-    this.imageHeight  = this.$refs.bgImage.clientHeight
-    this.minTranslateY = -this.imageHeight + RESERVED_HEIGHT
+    this.imageHeight = this.$refs.bgImage.clientHeight
+    this.minTranslateY = -this.imageHeight + RESERVED_HEIGHT // -223
+    // 预留图片高度
     this.$refs.list.$el.style.top = `${this.imageHeight}px`
   },
 	methods: {
-	  back() {
-			this.$router.back()
-		},
+    handlePlayList(playlist) {
+      const bottom = playlist.length > 0 ? '60px' : '0'
+      this.$refs.list.$el.style.bottom = bottom
+      this.$refs.list.refresh()
+    },
+    back() {
+      this.$router.back()
+    },
     scroll(pos) {
       this.scrollY = pos.y
-    }
+    },
+    selectItem(item, index) {
+      this.selectPlay({
+        list: this.songs,
+        index
+      })
+    },
+    random() {
+      this.randomPlay({
+        list: this.songs
+      })
+    },
+    ...mapActions([
+      'selectPlay',
+      'randomPlay'
+    ])
 	},
 	computed: {
 		bgStyle() {
@@ -83,10 +107,11 @@ export default {
   watch: {
     scrollY(newVal) {
       let translateY = Math.max(this.minTranslateY, newVal)
+      console.log(this.minTranslateY, newVal)
       let zIndex = 0
       let scale = 1
       let blur = 0
-      const percent = Math.abs(newVal/this.imageHeight)
+      const percent = Math.abs(newVal / this.imageHeight)
       this.$refs.layer.style[transform] = `translate3d(0,${translateY}px,0)`
 
       if (newVal > 0) {
@@ -96,7 +121,7 @@ export default {
         blur = Math.min(20, 20 * percent)
       }
 
-      if(newVal < this.minTranslateY) {
+      if (newVal < this.minTranslateY) {
         zIndex = 10
         this.$refs.bgImage.style.paddingTop = 0
         this.$refs.bgImage.style.height = `${RESERVED_HEIGHT}px`

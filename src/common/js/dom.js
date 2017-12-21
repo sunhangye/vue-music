@@ -22,8 +22,6 @@ export function getData(el, name, val) {
   }
 }
 
-
-
 let elementStyle = document.createElement('div').style
 
 let ventor = (() => {
@@ -44,7 +42,7 @@ let ventor = (() => {
 })()
 
 export function prefixStyle(style) {
-  if (ventor == false) {
+  if (ventor === false) {
     return false
   }
   if (ventor === 'standard') {

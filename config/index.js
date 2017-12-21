@@ -45,6 +45,12 @@ module.exports = {
     // (https://github.com/webpack/css-loader#sourcemaps)
     // In our experience, they generally work as expected,
     // just be aware of this issue when enabling this option.
-    cssSourceMap: false
+    cssSourceMap: false,
+    // 下面两个都是浏览器展示错误的方式
+    //  在浏览器是否展示错误蒙层
+    errorOverlay: true,
+    // 是否展示错误的通知
+    notifyOnErrors: true,
+    useEslint: true
   }
 }

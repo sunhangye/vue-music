@@ -1,4 +1,4 @@
-export const commenParams = {
+export const commonParams = {
 	g_tk: 5381,
 	uin: 0,
 	format: 'json',

@@ -50,9 +50,9 @@ export default {
 	},
 	created() {
 		// 不必观测touch对象的变化，所以不放到data和props(添加getter setter 属性)
-		this.touch = {},
-		this.listenScroll = true,
-		this.listHeight = [],
+		this.touch = {}
+		this.listenScroll = true
+		this.listHeight = []
 		this.probeType = 3
 	},
 	methods: {
@@ -76,6 +76,9 @@ export default {
 			let anchorIndex = parseInt(this.touch.anchorIndex) + delta
 
 			this._scroll(anchorIndex)
+		},
+		refresh() {
+			this.$refs.listview.refresh()
 		},
 		_scroll(index) {
 			if (!index && index !== 0) {
