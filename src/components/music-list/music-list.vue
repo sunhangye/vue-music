@@ -107,7 +107,6 @@ export default {
   watch: {
     scrollY(newVal) {
       let translateY = Math.max(this.minTranslateY, newVal)
-      console.log(this.minTranslateY, newVal)
       let zIndex = 0
       let scale = 1
       let blur = 0
