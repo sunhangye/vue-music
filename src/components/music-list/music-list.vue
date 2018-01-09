@@ -20,7 +20,7 @@
             :listen-scroll="listenScroll"
             class="list" ref="list">
       <div class="song-list-wrapper">
-        <song-list :songs="songs" @select="selectItem"></song-list>
+        <song-list :rank="rank" :songs="songs" @select="selectItem"></song-list>
       </div>
       <div class="loading-container" v-show="!songs.length">
     		<loading></loading>
@@ -29,119 +29,123 @@
   </div>
 </template>
 
-<script tyep="text/ecmascript-6">
-import Scroll from 'base/scroll/scroll'
-import Loading from 'base/loading/loading'
-import SongList from 'base/song-list/song-list'
-import { prefixStyle } from 'common/js/dom'
-import { mapActions } from 'vuex'
-import { playlistMixin } from 'common/js/mixin'
+  <script tyep="text/ecmascript-6">
+  import Scroll from 'base/scroll/scroll'
+  import Loading from 'base/loading/loading'
+  import SongList from 'base/song-list/song-list'
+  import { prefixStyle } from 'common/js/dom'
+  import { mapActions } from 'vuex'
+  import { playlistMixin } from 'common/js/mixin'
 
-const RESERVED_HEIGHT = 40 // 保留标题高度
-const transform = prefixStyle('transform')
-const backdropFilter = prefixStyle('backdrop-filter')
-export default {
-  mixins: [playlistMixin],
-	props: {
-		bgImage: {
-			type: String,
-			default: ''
-		},
-		title: {
-			type: String,
-			default: ''
-		},
-		songs: {
-			type: Array,
-			default: []
-		}
-	},
-  data() {
-    return {
-      scrollY: 0
-    }
-  },
-  created() {
-      this.probeType = 3
-      this.listenScroll = true
-    },
-  mounted() {
-    this.imageHeight = this.$refs.bgImage.clientHeight
-    this.minTranslateY = -this.imageHeight + RESERVED_HEIGHT // -223
-    // 预留图片高度
-    this.$refs.list.$el.style.top = `${this.imageHeight}px`
-  },
-	methods: {
-    handlePlayList(playlist) {
-      const bottom = playlist.length > 0 ? '60px' : '0'
-      this.$refs.list.$el.style.bottom = bottom
-      this.$refs.list.refresh()
-    },
-    back() {
-      this.$router.back()
-    },
-    scroll(pos) {
-      this.scrollY = pos.y
-    },
-    selectItem(item, index) {
-      this.selectPlay({
-        list: this.songs,
-        index
-      })
-    },
-    random() {
-      this.randomPlay({
-        list: this.songs
-      })
-    },
-    ...mapActions([
-      'selectPlay',
-      'randomPlay'
-    ])
-	},
-	computed: {
-		bgStyle() {
-			return `background-image:url(${this.bgImage})`
-		}
-	},
-  watch: {
-    scrollY(newVal) {
-      let translateY = Math.max(this.minTranslateY, newVal)
-      let zIndex = 0
-      let scale = 1
-      let blur = 0
-      const percent = Math.abs(newVal / this.imageHeight)
-      this.$refs.layer.style[transform] = `translate3d(0,${translateY}px,0)`
-
-      if (newVal > 0) {
-        scale = 1 + percent
-        zIndex = 10
-      } else {
-        blur = Math.min(20, 20 * percent)
+  const RESERVED_HEIGHT = 40 // 保留标题高度
+  const transform = prefixStyle('transform')
+  const backdropFilter = prefixStyle('backdrop-filter')
+  export default {
+    mixins: [playlistMixin],
+  	props: {
+  		bgImage: {
+  			type: String,
+  			default: ''
+  		},
+  		title: {
+  			type: String,
+  			default: ''
+  		},
+  		songs: {
+  			type: Array,
+  			default: []
+  		},
+      rank: {
+        type: Boolean,
+        default: false
       }
-
-      if (newVal < this.minTranslateY) {
-        zIndex = 10
-        this.$refs.bgImage.style.paddingTop = 0
-        this.$refs.bgImage.style.height = `${RESERVED_HEIGHT}px`
-        this.$refs.playBtn.style.display = 'none'
-      } else {
-        this.$refs.bgImage.style.paddingTop = '70%'
-        this.$refs.bgImage.style.height = 0
-        this.$refs.playBtn.style.display = ''
+  	},
+    data() {
+      return {
+        scrollY: 0
       }
+    },
+    created() {
+        this.probeType = 3
+        this.listenScroll = true
+      },
+    mounted() {
+      this.imageHeight = this.$refs.bgImage.clientHeight
+      this.minTranslateY = -this.imageHeight + RESERVED_HEIGHT // -223
+      // 预留图片高度
+      this.$refs.list.$el.style.top = `${this.imageHeight}px`
+    },
+  	methods: {
+      handlePlayList(playlist) {
+        const bottom = playlist.length > 0 ? '60px' : '0'
+        this.$refs.list.$el.style.bottom = bottom
+        this.$refs.list.refresh()
+      },
+      back() {
+        this.$router.back()
+      },
+      scroll(pos) {
+        this.scrollY = pos.y
+      },
+      selectItem(item, index) {
+        this.selectPlay({
+          list: this.songs,
+          index
+        })
+      },
+      random() {
+        this.randomPlay({
+          list: this.songs
+        })
+      },
+      ...mapActions([
+        'selectPlay',
+        'randomPlay'
+      ])
+  	},
+  	computed: {
+  		bgStyle() {
+  			return `background-image:url(${this.bgImage})`
+  		}
+  	},
+    watch: {
+      scrollY(newVal) {
+        let translateY = Math.max(this.minTranslateY, newVal)
+        let zIndex = 0
+        let scale = 1
+        let blur = 0
+        const percent = Math.abs(newVal / this.imageHeight)
+        this.$refs.layer.style[transform] = `translate3d(0,${translateY}px,0)`
 
-      this.$refs.bgImage.style[transform] = `scale(${scale})`
-      this.$refs.bgImage.style.zIndex = zIndex
-      this.$refs.filter.style[backdropFilter] = `blur(${blur}px)`
-    }
-  },
-	components: {
-		Scroll,
-		SongList,
-		Loading
-	}
-}
+        if (newVal > 0) {
+          scale = 1 + percent
+          zIndex = 10
+        } else {
+          blur = Math.min(20, 20 * percent)
+        }
+
+        if (newVal < this.minTranslateY) {
+          zIndex = 10
+          this.$refs.bgImage.style.paddingTop = 0
+          this.$refs.bgImage.style.height = `${RESERVED_HEIGHT}px`
+          this.$refs.playBtn.style.display = 'none'
+        } else {
+          this.$refs.bgImage.style.paddingTop = '70%'
+          this.$refs.bgImage.style.height = 0
+          this.$refs.playBtn.style.display = ''
+        }
+
+        this.$refs.bgImage.style[transform] = `scale(${scale})`
+        this.$refs.bgImage.style.zIndex = zIndex
+        this.$refs.filter.style[backdropFilter] = `blur(${blur}px)`
+      }
+    },
+  	components: {
+  		Scroll,
+  		SongList,
+  		Loading
+  	}
+  }
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">

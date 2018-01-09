@@ -33,6 +33,10 @@ export default class Song {
   }
 }
 
+/**
+ * 获取QQ音乐基本信息
+  http://base.music.qq.com/fcgi-bin/fcg_musicexpress.fcg?json=3&guid=1830679348&g_tk=938407465&loginUin=0&hostUin=0&format=jsonp&inCharset=GB2312&outCharset=GB2312%C2%ACice=0&platform=yqq&jsonpCallback=&needNewCode=0
+ */
 export function createSong(musicData) {
   return new Song({
     id: musicData.songid,
@@ -42,7 +46,8 @@ export function createSong(musicData) {
     album: musicData.albumname,
     duration: musicData.interval,
     image: `https://y.gtimg.cn/music/photo_new/T002R300x300M000${musicData.albummid}.jpg?max_age=2592000`,
-    url: `http://ws.stream.qqmusic.qq.com/${musicData.songid}.m4a?fromtag=46`
+    url:  `http://isure.stream.qqmusic.qq.com/C100${musicData.songmid}.m4a?fromtag=32`,
+
   })
 }
 

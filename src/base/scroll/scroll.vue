@@ -1,3 +1,4 @@
+
 <template>
 <div ref="wrapper">
 	<slot></slot>
@@ -27,6 +28,18 @@ export default {
 		listenScroll: { // 监听滚动，实现联动效果
 			type: Boolean,
 			default: false
+		},
+		pullup: { // 上拉加载 监听scrollEnd
+			type: Boolean,
+			default: false
+		},
+		pullDown: { // 下拉刷新
+			type: Boolean,
+			default: true
+		},
+		beforeScroll: {
+			type: Boolean,
+			default: true
 		}
 	},
 	mounted() {
@@ -49,6 +62,29 @@ export default {
 				this.scroll.on('scroll', (pos) => {
 					// this.$emit('scroll', 'pos')  这里的this为BScroll
 					me.$emit('scroll', pos)
+				})
+			}
+			// 上拉加载数据
+			if (this.pullup) {
+				this.scroll.on('scrollEnd', () => {
+					// 滚动距离超过 最大滚动距离 派发 scrollToEnd事件
+					if (this.scroll.y <= this.scroll.maxScrollY + 50) {
+						this.$emit('scrollToEnd')
+					}
+				})
+			}
+
+			if (this.pullDown) {
+				this.scroll.on('scrollEnd', () => {
+					if (this.scroll.y > 50) {
+						this.$emit('scrollToUp')
+					}
+				})
+			}
+
+			if (this.beforeScroll) {
+				this.scroll.on('beforeScrollStart', () => {
+					this.$emit('beforeScroll')
 				})
 			}
 		},

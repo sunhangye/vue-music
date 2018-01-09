@@ -24,3 +24,17 @@ export function shuffle(arr) {
   }
   return _arr
 }
+
+export function debounce(func, delay) {
+  let timer = null
+  let context = this
+
+  return function(...args) {
+    if (timer) {
+      clearTimeout(timer)
+    }
+    timer = setTimeout(() => {
+      func.apply(context, args)
+    }, delay)
+  }
+}

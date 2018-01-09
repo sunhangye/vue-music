@@ -207,7 +207,9 @@ export default {
       if (!this.songReady) {
           return
       }
-      this.currentLyric.togglePlay()
+      if (!this.currentLyric) {
+        this.currentLyric.togglePlay()
+      }
       this.setPlayingState(!this.playing)
     },
     getLyric() {
@@ -216,7 +218,7 @@ export default {
         this.currentLyric.play()
       }).catch(() => {
         this.playingLyric = ''
-        this.currentLyric = ['暂无歌词']
+        this.currentLyric = null
         this.currentTime = 0
       })
     },
