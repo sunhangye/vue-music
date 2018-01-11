@@ -113,6 +113,9 @@
       listScroll() {
         this.$emit('listScroll')
       },
+      refresh() {
+        this.$refs.suggest.refresh()
+      },
       // 边界判断
       _checkMore(data) {
         const song = data.song
