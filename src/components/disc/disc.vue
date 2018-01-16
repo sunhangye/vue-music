@@ -39,7 +39,6 @@ export default {
 
       getSongList(this.disc.dissid).then((res) => {
         if (res.code === ERROR_OK) {
-          console.log(res.cdlist[0].songlist)
           this.songs = this._normalizeSinger(res.cdlist[0].songlist)
         }
       })
