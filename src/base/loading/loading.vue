@@ -16,8 +16,8 @@ export default {
 }
 </script>
 
-<style scoped lang="stylus">
-	@import "~common/stylus/variable";
+<style scoped lang="stylus" rel="stylesheet/stylus">
+	@import "~common/stylus/variable"
 
 	.loading
 		width: 100%

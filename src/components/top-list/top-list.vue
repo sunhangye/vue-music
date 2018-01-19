@@ -43,7 +43,6 @@ export default {
 
       getMusicList(this.topList.id).then((res) => {
         if (res.code === ERROR_OK) {
-          console.log(res.songlist)
           this.songs = this._normalizeSinger(res.songlist)
         }
       })

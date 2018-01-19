@@ -59,7 +59,7 @@ export default {
 	.item
 		display: flex
 		align-items: center
-		height: 64px;
+		height: 64px
 		box-sizng: border-box
 		font-size: $font-size-medium
 		.rank
@@ -69,8 +69,8 @@ export default {
 			text-align: center
 			.icon
 				display: inline-block
-				width: 25px;
-				height: 24px;
+				width: 25px
+				height: 24px
 				background-size: 25px 24px
 				&.icon0
 					bg-image('first')
@@ -89,7 +89,7 @@ export default {
 				no-wrap()
 				color: $color-text
 			.desc
-				margin-top: 4px;
+				margin-top: 4px
 				no-wrap()
 				color: $color-text-d
 </style>

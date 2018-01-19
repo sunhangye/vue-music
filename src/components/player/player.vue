@@ -97,13 +97,12 @@
 </template>
 
 <script type='text/ecmascript-6'>
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 import animations from 'create-keyframe-animation'
 import { prefixStyle } from 'common/js/dom'
 import ProgressBar from 'base/progress-bar/progress-bar'
 import ProgressCircle from 'base/progress-circle/progress-circle'
 import { playMode } from 'common/js/config'
-import { shuffle } from 'common/js/util'
 import Lyric from 'lyric-parser'
 import Scroll from 'base/scroll/scroll'
 import Playlist from 'components/playlist/playlist'
@@ -271,6 +270,7 @@ export default {
     },
     ready() {
       this.songReady = true
+      this.savePlayHistory(this.currentSong)
     },
     error() {
       this.songReady = true
@@ -394,7 +394,10 @@ export default {
       setCurrentIndex: 'SET_CURRENT_INDEX',
       setPlayMode: 'SET_PLAY_MODE',
       setPlayList: 'SET_PLAYLIST'
-    })
+    }),
+    ...mapActions([
+      'savePlayHistory'
+    ])
   },
   watch: {
     currentSong(newSong, oldSong) {
@@ -411,14 +414,14 @@ export default {
         this.currentLineNum = 0
       }
       this.$nextTick(() => {
-        this.$refs.audio.play().then(() => {}).catch((err) => {})
+        this.$refs.audio.play().then(() => {}).catch((err) => { console.log(err) })
         this.getLyric()
       })
     },
     playing(newPlaying) {
       const audio = this.$refs.audio
       this.$nextTick(() => {
-        newPlaying ? audio.play(): audio.pause()
+        newPlaying ? audio.play().then(() => {}).catch((err) => { console.log(err) }) : audio.pause().then(() => {}).catch((err) => { console.log(err) })
       })
     }
   },

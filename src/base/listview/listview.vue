@@ -166,49 +166,49 @@ export default {
 	@import "~common/stylus/variable"
 
 	.listview
-		position: relative;
-		width: 100%;
-		height: 100%;
-		overflow: hidden;
+		position: relative
+		width: 100%
+		height: 100%
+		overflow: hidden
 		background: $color-background
 		.list-group
-			padding-bottom: 30px;
+			padding-bottom: 30px
 			.list-group-title
-				height: 30px;
+				height: 30px
 				line-height: 30px
 				font-size: $font-size-small
 				color: $color-text-l
 				background: $color-highlight-background
-				padding-left: 20px;
+				padding-left: 20px
 			.list-group-item
-				display: flex;
+				display: flex
 				align-items: center
-				padding: 20px 0 0 30px;
+				padding: 20px 0 0 30px
 				.avatar
-					width: 50px;
-					height: 50px;
+					width: 50px
+					height: 50px
 					border-radius: 50%
 				.name
-					margin-left: 20px;
+					margin-left: 20px
 					color $color-text-l
 					font-size: $font-size-medium
 		.list-shortcut
-			position: absolute;
-			top: 50%;
-			right: 0;
-			z-index: 30;
+			position: absolute
+			top: 50%
+			right: 0
+			z-index: 30
 			transform: translateY(-50%)
-			width: 20px;
-			padding: 20px 0;
+			width: 20px
+			padding: 20px 0
 			text-align: center
 			border-radius: 20px
-			background: $color-background-d;
+			background: $color-background-d
 			font-size: $font-size-small-s
 			.item
 				padding: 3px
 				line-height: 1
 				color: $color-text-l
-				font-familay: Helvetica;
+				font-familay: Helvetica
 				&.current
 					color: $color-theme
 		.list-fixed
@@ -217,9 +217,9 @@ export default {
 			top: 0
 			width: 100%
 			.fixed-title
-				height: 30px;
+				height: 30px
 				line-height: 30px
-				padding-left: 20px;
+				padding-left: 20px
 				color: $color-text-l
 				font-size: $font-size-small
 				background: $color-highlight-background

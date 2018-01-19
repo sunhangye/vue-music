@@ -125,11 +125,11 @@
           text-align center
           padding: 0 20px 20px 20px
           .icon
-            flex: 0 0 60px;
-            width: 60px;
-            padding-right: 20px;
+            flex: 0 0 60px
+            width: 60px
+            padding-right: 20px
           .text
-            display: flex;
+            display: flex
             flex-direction column
             overflow hidden
             font-size $font-size-medium
