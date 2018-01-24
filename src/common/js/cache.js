@@ -82,10 +82,20 @@ export function loadFavorite() {
   return storage.get(FAVORITE_KEY, [])
 }
 
-export function saveFavoriteList(song) {
+export function saveFavorite(song) {
   let songs = storage.get(FAVORITE_KEY, [])
   insertArray(songs, song, (item) => {
     return item.id === song.id
   }, FAVORITE_MAX_LEN)
+  storage.set(FAVORITE_KEY, songs)
+  return songs
+}
+
+export function deleteFavorite(song) {
+  let songs = storage.get(FAVORITE_KEY, [])
+  deleteFromArray(songs, (item) => {
+    return item.id === song.id
+  })
+  storage.set(FAVORITE_KEY, songs)
   return songs
 }

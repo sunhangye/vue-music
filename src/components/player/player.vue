@@ -65,8 +65,8 @@
             <div class="icon icon-right" :class="disable">
               <i class="icon-next" @click="next"></i>
             </div>
-            <div class="icon icon-right">
-              <i class="icon-not-favorite"></i>
+            <div class="icon icon-right" >
+              <i :class="getFavoriteIcon(currentSong)" @click="toggleFavorite(currentSong)"></i>
             </div>
           </div>
         </div>
@@ -97,22 +97,32 @@
 </template>
 
 <script type='text/ecmascript-6'>
-import { mapGetters, mapMutations, mapActions } from 'vuex'
+import {
+  mapGetters,
+  mapMutations,
+  mapActions
+} from 'vuex'
 import animations from 'create-keyframe-animation'
-import { prefixStyle } from 'common/js/dom'
+import {
+  prefixStyle
+} from 'common/js/dom'
 import ProgressBar from 'base/progress-bar/progress-bar'
 import ProgressCircle from 'base/progress-circle/progress-circle'
-import { playMode } from 'common/js/config'
+import {
+  playMode
+} from 'common/js/config'
 import Lyric from 'lyric-parser'
 import Scroll from 'base/scroll/scroll'
 import Playlist from 'components/playlist/playlist'
-import {playMixin} from 'common/js/mixin'
+import {
+  playerMixin
+} from 'common/js/mixin'
 
 const transform = prefixStyle('transform')
 const transitionDuration = prefixStyle('transitionDuration')
 
 export default {
-  mixins: [playMixin],
+  mixins: [playerMixin],
   data() {
     return {
       songReady: false,
@@ -157,7 +167,11 @@ export default {
       this.setFullScreen(true)
     },
     enter(el, done) {
-      const { x, y, scale } = this._getPosAndScale()
+      const {
+        x,
+        y,
+        scale
+      } = this._getPosAndScale()
 
       let animation = {
         0: {
@@ -191,7 +205,11 @@ export default {
     },
     leave(el, done) {
       this.$refs.cdWrapper.style.transition = 'all 0.4s'
-      const { x, y, scale } = this._getPosAndScale()
+      const {
+        x,
+        y,
+        scale
+      } = this._getPosAndScale()
       this.$refs.cdWrapper.style[transform] = `translate3d(${x}px, ${y}px, 0) scale(${scale})`
       this.$refs.cdWrapper.addEventListener('transitionend', done)
     },
@@ -201,7 +219,7 @@ export default {
     },
     togglePlaying() {
       if (!this.songReady) {
-          return
+        return
       }
       if (this.currentLyric) {
         this.currentLyric.togglePlay()
@@ -210,6 +228,9 @@ export default {
     },
     getLyric() {
       this.currentSong.getLyric().then((lyric) => {
+        if (this.currentSong.lyric !== lyric) {
+          return
+        }
         this.currentLyric = new Lyric(lyric, this.handleLyric)
         this.currentLyric.play()
       }).catch(() => {
@@ -235,6 +256,7 @@ export default {
 
       if (this.playList.length === 1) {
         this.loop()
+        return
       } else {
         let index = this.currentIndex + 1
         if (index === this.playList.length) {
@@ -254,6 +276,7 @@ export default {
 
       if (this.playList.length === 1) {
         this.loop()
+        return
       } else {
         let index = this.currentIndex - 1
         if (index === -1) {
@@ -286,6 +309,7 @@ export default {
       // 重置 歌词、播放时间、播放
       this.$refs.audio.currentTime = 0
       this.$refs.audio.play()
+      this.setPlayingState(true)
       if (this.currentLyric) {
         this.currentLyric.seek(0)
       }
@@ -389,11 +413,7 @@ export default {
       }
     },
     ...mapMutations({
-      setFullScreen: 'SET_FULLSCREEN',
-      setPlayingState: 'SET_PLAYING_STATE',
-      setCurrentIndex: 'SET_CURRENT_INDEX',
-      setPlayMode: 'SET_PLAY_MODE',
-      setPlayList: 'SET_PLAYLIST'
+      setFullScreen: 'SET_FULLSCREEN'
     }),
     ...mapActions([
       'savePlayHistory'
@@ -413,15 +433,16 @@ export default {
         this.playingLyric = ''
         this.currentLineNum = 0
       }
-      this.$nextTick(() => {
-        this.$refs.audio.play().then(() => {}).catch((err) => { console.log(err) })
+      clearTimeout(this.timer)
+      this.timer = setTimeout(() => {
+        this.$refs.audio.play()
         this.getLyric()
-      })
+      }, 1000)
     },
     playing(newPlaying) {
       const audio = this.$refs.audio
       this.$nextTick(() => {
-        newPlaying ? audio.play().then(() => {}).catch((err) => { console.log(err) }) : audio.pause().then(() => {}).catch((err) => { console.log(err) })
+        newPlaying ? audio.play() : audio.pause()
       })
     }
   },
@@ -671,10 +692,8 @@ export default {
           left: 0
           top: 0
   @keyframes rotate
-    0%
-      transform: rotate(0)
     100%
-      transform: rotate(360deg)
+      transform: rotate(1turn)
 
 
 </style>
